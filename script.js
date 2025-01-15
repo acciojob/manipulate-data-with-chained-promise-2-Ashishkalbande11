@@ -1,37 +1,40 @@
 //your JS code here. If required.
-function getNumbers() {
-            return new Promise((resolve) => {
-                setTimeout(() => {
-                    resolve([1, 2, 3, 4]);
-                }, 3000);
-            });
-        }
+const numbers = [1, 2, 3, 4];
 
-        function filterEvenNumbers(numbers) {
-            return new Promise((resolve) => {
-                setTimeout(() => {
-                    const evens = numbers.filter(num => num % 2 === 0);
-                    document.getElementById('output').textContent = `Filtered Even Numbers: ${evens.join(', ')}`;
-                    resolve(evens);
-                }, 1000);
-            });
-        }
+// Function that returns a promise resolving with the array after 3 seconds
+function fetchNumbers() {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(numbers);
+    }, 3000);  // Resolve after 3 seconds
+  });
+}
 
-        function multiplyByTwo(numbers) {
-            return new Promise((resolve) => {
-                setTimeout(() => {
-                    const doubled = numbers.map(num => num * 2);
-                    document.getElementById('output').textContent = `Doubled Numbers: ${doubled.join(', ')}`;
-                    resolve(doubled);
-                }, 2000);
-            });
-        }
+// Function to filter even numbers
+function filterEvenNumbers(arr) {
+  return arr.filter((num) => num % 2 === 0);
+}
 
-        // Chain the promises
-        getNumbers()
-            .then(filterEvenNumbers)
-            .then(multiplyByTwo)
-            .catch(error => console.error(error));
+// Function to multiply numbers by 2
+function multiplyByTwo(arr) {
+  return arr.map((num) => num * 2);
+}
 
+// Start the promise chain when the script loads
+fetchNumbers()
+  .then((arr) => {
+    // First operation: filter out odd numbers
+    const evenNumbers = filterEvenNumbers(arr);
+    setTimeout(() => {
+      document.getElementById('output').textContent = `Even numbers: ${evenNumbers}`;
+    }, 1000); // Print after 1 second
 
-
+    // Second operation: multiply even numbers by 2
+    const multipliedNumbers = multiplyByTwo(evenNumbers);
+    setTimeout(() => {
+      document.getElementById('output').textContent = `After multiplying by 2: ${multipliedNumbers}`;
+    }, 2000); // Print after 2 seconds
+  })
+  .catch((error) => {
+    document.getElementById('output').textContent = `Error: ${error}`;
+  });
